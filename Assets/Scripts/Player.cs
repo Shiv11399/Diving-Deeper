@@ -10,6 +10,8 @@ public enum State
 }
 public class Player : MonoBehaviour
 {
+    [Range(0,1)]
+    [SerializeField]private float MovemenytSpeed = 0.2f;
 
     private State PlayerState = State.Idle;
 
@@ -19,37 +21,47 @@ public class Player : MonoBehaviour
 
 
     private Transform TargetElementTransform;
+    private float time  = 0f;
 
     /// <summary>
     /// This method will move the player to respective target position.
     /// </summary>
     /// <param name="position"></param>
-   public void MoveTo(Transform targetElement) // this move will be a command stored in an list of commands.
+    /// 
+    private void Awake()
     {
+        Application.targetFrameRate = 60;
+    }
+    public void MoveTo(Transform targetElement) // this move will be a command stored in an list of commands.
+    {
+        if (PlayerState == State.Moving) return;
         TargetElementTransform = targetElement;
-
         Target = targetElement.position;
         Initial = transform.position;
         PlayerState = State.Moving;
-       // transform.position = vect; // THIS WILL WORK IF WE ARE MOVING IN A STRAIGHT LINE
+
         
     }
 
     private void Update()
     {
-        var time = Time.deltaTime;
         if(PlayerState == State.Moving)
         {
+            time += Time.deltaTime * MovemenytSpeed;
             transform.position = Vector2.Lerp(Initial, Target, time);
-            if (Vector2.Distance(Initial, Target)< 0.1f)
+            if (Vector2.Distance(transform.position, Target) < 0.1f)
             {
                 Destroy(TargetElementTransform.gameObject);
                 PlayerState = State.Idle;
+                Target = Vector2.zero;
                 time = 0;
             };
         }
+    }
 
-
+    private float SinOscillator(float speed)
+    {
+        return Mathf.Sin(speed);
     }
 
 

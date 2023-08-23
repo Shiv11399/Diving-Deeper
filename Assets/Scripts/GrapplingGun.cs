@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GrapplingGun : MonoBehaviour
 {
@@ -9,13 +10,17 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] float RotationSpeedModifier = 0.5f;
     [SerializeField] float MaxRotationAngle = 60f;
 
+    [SerializeField] bool auto = false;
+
+    private float angle = 0;
+
     float tempOffset = 180;
     void Update()
     {
 
         Vector3 eulerAngles = transform.eulerAngles;
 
-        float axis = (Input.GetAxis("Horizontal"));
+        float axis = (auto)? (Input.GetAxis("Horizontal")) : SinOscillator(0.5f);
 
         float zOffset = (eulerAngles.z + axis);
 
@@ -44,5 +49,11 @@ public class GrapplingGun : MonoBehaviour
     private static void DestroyElement(RaycastHit2D hitInfo) // this functionality will be moved to the element script.
     {
         Destroy(hitInfo.transform.gameObject);
+    }
+
+    private float SinOscillator(float speed)
+    {
+        angle += speed;
+        return Mathf.Sin(angle * Mathf.Deg2Rad );
     }
 }
