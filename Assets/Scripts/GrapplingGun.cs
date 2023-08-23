@@ -37,6 +37,5 @@ public class GrapplingGun : MonoBehaviour
                 //StartCoroutine(Shoot1());
             }
         }
-
-
+    }
 }
