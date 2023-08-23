@@ -24,18 +24,25 @@ public class GrapplingGun : MonoBehaviour
         zOffset = Mathf.Clamp(zOffset, -MaxRotationAngle, MaxRotationAngle);
 
         transform.eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zOffset);
+
+        Fire();
+
     }
 
-    void Fire(Vector2 direction)
+    void Fire()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction);//, shootDist, hittableLayer);
-        if (hitInfo != null)
+        Debug.DrawRay(new Vector2(transform.position.x, transform.position.y), -transform.up * 4, Color.red);
+        RaycastHit2D hitInfo = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y) , -transform.up);
+
+        if (hitInfo.collider == null) return;
+        if (hitInfo.collider.tag == "Elements")
         {
-            if (hitInfo.collider.tag == "Player")
-            {
-                //lineRenderer.enabled = true;
-                //StartCoroutine(Shoot1());
-            }
+            GetComponentInParent<Player>().MoveTo(hitInfo.transform);
         }
+    }
+
+    private static void DestroyElement(RaycastHit2D hitInfo) // this functionality will be moved to the element script.
+    {
+        Destroy(hitInfo.transform.gameObject);
     }
 }
