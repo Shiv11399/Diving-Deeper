@@ -26,5 +26,17 @@ public class GrapplingGun : MonoBehaviour
         transform.eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, zOffset);
     }
 
+    void Fire(Vector2 direction)
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction);//, shootDist, hittableLayer);
+        if (hitInfo != null)
+        {
+            if (hitInfo.collider.tag == "Player")
+            {
+                //lineRenderer.enabled = true;
+                //StartCoroutine(Shoot1());
+            }
+        }
+
 
 }

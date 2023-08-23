@@ -11,6 +11,6 @@ public class Player : MonoBehaviour
     /// <param name="position"></param>
    void MoveTo(Vector2 position)
     {
-        transform.Translate(position); // THIS WILL WORK IF WE ARE MOVING IN A STRAIGHT LINE 
+        transform.Translate(position); // THIS WILL WORK IF WE ARE MOVING IN A STRAIGHT LINE
     }
 }
