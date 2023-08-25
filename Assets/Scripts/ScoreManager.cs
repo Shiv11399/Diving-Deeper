@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 [Serializable]
 public class PlayerScore
@@ -10,7 +10,11 @@ public class PlayerScore
     public int score;
     public int grappleAttemptsLeft;
 }
-
+public enum ScoreType
+{
+    Score = 0,
+    Attempts = 1,   
+}
 public class ScoreManager : MonoBehaviour
 {
     public  PlayerScore CurrentScore;
@@ -19,7 +23,34 @@ public class ScoreManager : MonoBehaviour
 
     public int currentLevel = 1;
 
+    public static UnityAction<ScoreType, int> ScoreChanged;
 
+
+    private void OnEnable()
+    {
+        ScoreChanged += SetScore;
+    }
+    private void OnDisable()
+    {
+        ScoreChanged -= SetScore;
+    }
+
+    void SetScore(ScoreType type, int value)
+    {
+        switch (type)
+        {
+            case ScoreType.Score:
+                CurrentScore.score += value;
+                UImanager.OnScoreUpdated.Invoke(CurrentScore.score);
+                break;
+            case ScoreType.Attempts:
+                CurrentScore.grappleAttemptsLeft += value ;
+                UImanager.OnGrappleFiredUpdated.Invoke(CurrentScore.grappleAttemptsLeft);
+                break;
+            default:
+                break;
+        }
+    }
     private void Start()
     {
         OnGameLoaded();

@@ -59,6 +59,7 @@ public class GrapplingGun : MonoBehaviour
             StartCoroutine(ShootBullet(Bullet, hitInfo.transform));
             GetComponentInParent<Player>().MoveTo(hitInfo.transform);
         }
+        ScoreManager.ScoreChanged.Invoke(ScoreType.Attempts, -1);
     }
 
     IEnumerator ShootBullet(GameObject bullet, Transform target)

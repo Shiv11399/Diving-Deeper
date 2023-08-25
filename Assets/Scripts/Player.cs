@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         if (playerState == State.Moving) return;
         TargetElementTransform = targetElement;
         Target = targetElement.position;
-            Initial = transform.position;
+        Initial = transform.position;
         playerState = State.Moving;
 
         
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
                 playerState = State.Idle;
                 Target = Vector2.zero;
                 time = 0;
+                ScoreManager.ScoreChanged.Invoke(ScoreType.Score, 1);
             };
         }
     }
